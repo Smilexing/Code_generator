@@ -22,7 +22,7 @@ public class MainGenerator {
 
         // 输出的根路径
         String projectPath = System.getProperty("user.dir");
-        String outputPath = projectPath + File.separator + "generator";
+        String outputPath = projectPath + File.separator + "generated" + File.separator + meta.getName();
         if (!FileUtil.exist(outputPath)) {
             FileUtil.mkdir(outputPath);
         }
@@ -36,7 +36,7 @@ public class MainGenerator {
         String outputBasePackage = meta.getBasePackage();
         // com/dexcode
         String outputBasePackagePath = StrUtil.join("/", StrUtil.split(outputBasePackage, "."));
-        // generated/src/main/java/com/dexcode
+        // generated/acm-template-pro-generator/src/main/java/com/dexcode
         String outputBaseJavaPackagePath = outputPath + File.separator + "src/main/java" + File.separator + outputBasePackagePath;
 
         String inputFilePath;
@@ -67,9 +67,9 @@ public class MainGenerator {
         outputFilePath = outputBaseJavaPackagePath + "/cli/command/ListCommand.java";
         DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
 
-        // cli.CommandExecutor.java.ftl
+        // cli.CommandExecutor
         inputFilePath = inputResourcePath + File.separator + "templates/java/cli/CommandExecutor.java.ftl";
-        outputFilePath = outputBaseJavaPackagePath + "/cli/CommandExecutor.java.ftl.java";
+        outputFilePath = outputBaseJavaPackagePath + "/cli/CommandExecutor.java";
         DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
 
         // Main
