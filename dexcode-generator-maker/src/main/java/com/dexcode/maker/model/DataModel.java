@@ -1,4 +1,4 @@
-package com.dexcode.model;
+package com.dexcode.maker.model;
 
 import lombok.Data;
 

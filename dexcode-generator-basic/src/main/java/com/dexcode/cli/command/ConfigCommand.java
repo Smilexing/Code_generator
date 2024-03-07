@@ -1,7 +1,7 @@
 package com.dexcode.cli.command;
 
 import cn.hutool.core.util.ReflectUtil;
-import com.dexcode.model.DataModel;
+import com.dexcode.maker.model.DataModel;
 import picocli.CommandLine;
 
 import java.lang.reflect.Field;

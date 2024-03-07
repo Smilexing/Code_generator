@@ -1,11 +1,12 @@
-package com.dexcode.generator;
+package com.dexcode.maker.generator.main;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
-import com.dexcode.generator.file.DynamicFileGenerator;
-import com.dexcode.generator.meta.MetaManager;
 import com.dexcode.maker.generator.JarGenerator;
+import com.dexcode.maker.generator.ScriptGenerator;
+import com.dexcode.maker.generator.file.DynamicFileGenerator;
+import com.dexcode.maker.meta.MetaManager;
 
 
 import com.dexcode.maker.meta.Meta;
@@ -26,6 +27,12 @@ public class MainGenerator {
         if (!FileUtil.exist(outputPath)) {
             FileUtil.mkdir(outputPath);
         }
+
+        // 第五期：复制原始文件
+        String sourceRootPath = meta.getFileConfig().getSourceRootPath();
+        // 将模板文件复制到项目目录下
+        String sourceCopyDestPath = outputPath + File.separator + ".source";
+        FileUtil.copy(sourceRootPath, sourceCopyDestPath, false);
 
         // 读取resources目录
         ClassPathResource classPathResource = new ClassPathResource("");
@@ -95,7 +102,11 @@ public class MainGenerator {
         // pom.xml
         inputFilePath = inputResourcePath + File.separator + "templates/pom.xml.ftl";
         outputFilePath = outputPath + File.separator + "pom.xml";
+        DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
 
+        // README.md
+        inputFilePath = inputResourcePath + File.separator + "templates/README.md.ftl";
+        outputFilePath = outputPath + File.separator + "README.md";
         DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
 
         // 构建 jar 包
@@ -105,6 +116,19 @@ public class MainGenerator {
         String shellOutputFilePath = outputPath + File.separator + "generator";
         String jarName = String.format("%s-%s-jar-with-dependencies.jar", meta.getName(), meta.getVersion());
         String jarPath = "target/" + jarName;
-       ScriptGenerator.doGenerate(shellOutputFilePath, jarPath);
+        ScriptGenerator.doGenerate(shellOutputFilePath, jarPath);
+
+        // 生成精简版的程序（产物包）
+        String distOutputPath = outputPath + "-dist";
+        //  - 拷贝jar包
+        String targetAbsolutePath = distOutputPath + File.separator + "target";
+        FileUtil.mkdir(targetAbsolutePath);
+        String jarAbsolutePath = outputPath + File.separator + jarPath;
+        FileUtil.copy(jarAbsolutePath, targetAbsolutePath, true);
+        //  - 拷贝脚本文件
+        FileUtil.copy(shellOutputFilePath, distOutputPath, true);
+        FileUtil.copy(shellOutputFilePath + ".bat", distOutputPath, true);
+        //  - 拷贝模板文件
+        FileUtil.copy(sourceCopyDestPath, distOutputPath, true);
     }
 }

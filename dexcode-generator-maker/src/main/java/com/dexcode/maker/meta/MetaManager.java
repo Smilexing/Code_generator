@@ -1,4 +1,4 @@
-package com.dexcode.generator.meta;
+package com.dexcode.maker.meta;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.json.JSONUtil;

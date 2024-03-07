@@ -2,7 +2,7 @@ package com.dexcode.cli.command;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.dexcode.generator.FileGenerator;
-import com.dexcode.model.DataModel;
+import com.dexcode.maker.model.DataModel;
 import lombok.Data;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;

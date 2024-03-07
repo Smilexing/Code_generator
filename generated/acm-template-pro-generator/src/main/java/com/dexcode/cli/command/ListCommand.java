@@ -10,7 +10,7 @@ import java.util.List;
 public class ListCommand implements Runnable {
 public void run() {
 // 输入路径
-String inputPath = "D:/Javap/yupi/dexcode-generator/dexcode-generator-demo-projects/acm-template-pro";
+String inputPath = ".source/acm-template-pro";
 List<File> files = FileUtil.loopFiles(inputPath);
     for (File file : files) {
     // 打印文件信息

@@ -1,4 +1,4 @@
-package com.dexcode.generator.file;
+package com.dexcode.maker.generator.file;
 
 import cn.hutool.core.io.FileUtil;
 import freemarker.template.Configuration;

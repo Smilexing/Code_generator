@@ -1,4 +1,4 @@
-package com.dexcode.generator;
+package com.dexcode.maker.generator;
 
 import cn.hutool.core.io.FileUtil;
 

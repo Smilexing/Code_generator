@@ -20,7 +20,7 @@ public class FileGenerator {
      * @throws IOException
      */
     public static void doGenerate(Object model) throws TemplateException, IOException {
-        String inputRootPath = "D:/Javap/yupi/dexcode-generator/dexcode-generator-demo-projects/acm-template-pro";
+        String inputRootPath = ".source/acm-template-pro";
         String outputRootPath = "generated";
 
         String inputPath;
