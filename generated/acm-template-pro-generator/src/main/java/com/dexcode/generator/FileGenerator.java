@@ -2,6 +2,7 @@ package com.dexcode.generator;
 
 import com.dexcode.generator.StaticFileGenerator;
 import com.dexcode.generator.DynamicFileGenerator;
+import com.dexcode.model.DataModel;
 import freemarker.template.TemplateException;
 
 import java.io.File;
@@ -19,20 +20,27 @@ public class FileGenerator {
      * @throws TemplateException
      * @throws IOException
      */
-    public static void doGenerate(Object model) throws TemplateException, IOException {
+    public static void doGenerate(DataModel model) throws TemplateException, IOException {
         String inputRootPath = ".source/acm-template-pro";
         String outputRootPath = "generated";
 
         String inputPath;
         String outputPath;
 
+        boolean needGit = model.needGit;
+        boolean loop = model.loop;
+        String author = model.author;
+        String outputText = model.outputText;
+
         inputPath = new File(inputRootPath, "src/com/dexcode/acm/MainTemplate.java.ftl").getAbsolutePath();
         outputPath = new File(outputRootPath, "src/com/dexcode/acm/MainTemplate.java").getAbsolutePath();
         DynamicFileGenerator.doGenerate(inputPath, outputPath, model);
 
-        inputPath = new File(inputRootPath, ".gitignore").getAbsolutePath();
-        outputPath = new File(outputRootPath, ".gitignore").getAbsolutePath();
-        StaticFileGenerator.copyFilesByHutool(inputPath, outputPath);
+        if (needGit) {
+            inputPath = new File(inputRootPath, ".gitignore").getAbsolutePath();
+            outputPath = new File(outputRootPath, ".gitignore").getAbsolutePath();
+            StaticFileGenerator.copyFilesByHutool(inputPath, outputPath);
+        }
 
         inputPath = new File(inputRootPath, "README.md").getAbsolutePath();
         outputPath = new File(outputRootPath, "README.md").getAbsolutePath();

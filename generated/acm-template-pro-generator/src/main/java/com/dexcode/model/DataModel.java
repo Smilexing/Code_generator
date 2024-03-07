@@ -8,18 +8,23 @@ import lombok.Data;
 @Data
 public class DataModel {
 
-        /**
-        * 是否生成循环
-        */
-    private boolean loop = false;
+    /**
+    * 是否生成 .gitignore文件
+    */
+    public boolean needGit = true;
 
-        /**
-        * 作者注释
-        */
-    private String author = "dexter";
+    /**
+    * 是否生成循环
+    */
+    public boolean loop = false;
 
-        /**
-        * 输出信息
-        */
-    private String outputText = "sum = ";
+    /**
+    * 作者注释
+    */
+    public String author = "dexter";
+
+    /**
+    * 输出信息
+    */
+    public String outputText = "sum = ";
 }

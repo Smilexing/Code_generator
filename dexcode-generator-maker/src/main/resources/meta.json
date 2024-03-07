@@ -6,7 +6,7 @@
   "author": "dexter",
   "createTime": "2023-12-07",
   "fileConfig": {
-    "sourceRootPath": "E:/桌面/dxcode-generator/dexcode-generator/dexcode-generator-demo-projects/acm-template-pro",
+    "sourceRootPath": "E:/桌面/dexcode-generator/dexcode-generator/dexcode-generator-demo-projects/acm-template-pro",
     "inputRootPath": ".source/acm-template-pro",
     "outputRootPath": "generated",
     "type": "dir",
@@ -21,7 +21,8 @@
         "inputPath": ".gitignore",
         "outputPath": ".gitignore",
         "type": "file",
-        "generateType": "static"
+        "generateType": "static",
+        "condition": "needGit"
       },
       {
         "inputPath": "README.md",
@@ -33,6 +34,13 @@
   },
   "modelConfig": {
     "models": [
+      {
+        "fieldName": "needGit",
+        "type": "boolean",
+        "description": "是否生成 .gitignore文件",
+        "defaultValue": true,
+        "abbr": "ng"
+      },
       {
         "fieldName": "loop",
         "type": "boolean",
