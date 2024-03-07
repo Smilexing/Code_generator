@@ -1,6 +1,6 @@
 package com.dexcode.generator;
 
-import com.dexcode.model.MainTemplateConfig;
+import cn.hutool.core.io.FileUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -13,20 +13,7 @@ import java.nio.file.Paths;
 /**
  * 动态文件生成
  */
-public class DynamicGenerator {
-    public static void main(String[] args) throws IOException, TemplateException {
-        // 当前idea打开的窗口
-        String projectPath = System.getProperty("user.dir");
-        String inputPath = projectPath + File.separator + "src/main/resources/templates/MainTemplate.java.ftl";
-        String outputPath = projectPath + File.separator + "MainTemplate2.java";
-        MainTemplateConfig mainTemplateConfig = new MainTemplateConfig();
-        // 这次使用循环
-        mainTemplateConfig.setLoop(true);
-        mainTemplateConfig.setAuthor("牛啤");
-        mainTemplateConfig.setOutputText("求和结果：");
-        doGenerate(inputPath, outputPath, mainTemplateConfig);
-    }
-
+public class DynamicFileGenerator {
     /**
      * @param inputPath  模板文件输入路径
      * @param outputPath 生成代码的输出路径
@@ -48,6 +35,11 @@ public class DynamicGenerator {
         // 创建模板对象，加载指定模板
         String templateName = new File(inputPath).getName();
 //        Template template = configuration.getTemplate(templateName);
+
+        // 第四期：如果文件不存在则创建目录
+        if (!FileUtil.exist(outputPath)) {
+            FileUtil.touch(outputPath);
+        };
 
         // 创建数据模型，从Main方法传递过来⏬
         // Writer out = new FileWriter(outputPath);    --->会导致中文乱码

@@ -1,6 +1,6 @@
-package com.dexcode;
+package ${basePackage};
 
-import com.dexcode.cli.CommandExecutor;
+import ${basePackage}.cli.CommandExecutor;
 
 /**
  * 全局调用入口

@@ -2,11 +2,11 @@ package com.dexcode.cli.command;
 
 import cn.hutool.core.util.ReflectUtil;
 import com.dexcode.model.DataModel;
-import picocli.CommandLine;
+import picocli.CommandLine.Command;
 
 import java.lang.reflect.Field;
 
-@CommandLine.Command(name = "config", description = "查看参数信息", mixinStandardHelpOptions = true)
+@Command(name = "config", description = "查看参数信息", mixinStandardHelpOptions = true)
 public class ConfigCommand implements Runnable {
     @Override
     public void run() {

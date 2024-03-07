@@ -3,20 +3,23 @@ package com.dexcode.model;
 import lombok.Data;
 
 /**
- * 动态模板配置
+ * 数据模型
  */
 @Data
-public class MainTemplateConfig {
+public class DataModel {
+
     /**
      * 是否生成循环
      */
-    private boolean loop;
+    private boolean loop = false;
+
     /**
      * 作者注释
      */
-    private String author;
+    private String author = "dexter";
+
     /**
      * 输出信息
      */
-    private String outputText;
+    private String outputText = "sum = ";
 }
