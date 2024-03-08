@@ -6,7 +6,7 @@
   "author": "dexter",
   "createTime": "2023-12-07",
   "fileConfig": {
-    "sourceRootPath": "E:/桌面/dexcode-generator/dexcode-generator/dexcode-generator-demo-projects/acm-template-pro",
+    "sourceRootPath": "E:/桌面/dexcode-generator/dexcode-generator-demo-projects/acm-template-pro",
     "inputRootPath": ".source/acm-template-pro",
     "outputRootPath": "generated",
     "type": "dir",
@@ -18,17 +18,24 @@
         "generateType": "dynamic"
       },
       {
-        "inputPath": ".gitignore",
-        "outputPath": ".gitignore",
-        "type": "file",
-        "generateType": "static",
-        "condition": "needGit"
-      },
-      {
-        "inputPath": "README.md",
-        "outputPath": "README.md",
-        "type": "file",
-        "generateType": "static"
+        "groupKey": "git",
+        "groupName": "开源",
+        "type": "group",
+        "condition": "needGit",
+        "files":[
+          {
+            "inputPath": ".gitignore",
+            "outputPath": ".gitignore",
+            "type": "file",
+            "generateType": "static"
+          },
+          {
+            "inputPath": "README.md",
+            "outputPath": "README.md",
+            "type": "file",
+            "generateType": "static"
+          }
+        ]
       }
     ]
   },
