@@ -13,12 +13,13 @@ import com.dexcode.maker.meta.enums.FileTypeEnum;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TemplateMaker {
 
-    public static long makeTemplate(Meta newMeta, String originProjectPath, String inputFilePath, Meta.ModelConfig.ModelInfo modelInfo, String searchStr, Long id) {
+    public static long makeTemplate(Meta newMeta, String originProjectPath, List<String> inputFilePathList, Meta.ModelConfig.ModelInfo modelInfo, String searchStr, Long id) {
         // 没有 id 则生成
         if (id == null) {
             id = IdUtil.getSnowflakeNextId();
@@ -40,21 +41,26 @@ public class TemplateMaker {
         // 输入文件信息
         String sourceRootPath = templatePath + File.separator + FileUtil.getLastPathEle(Paths.get(originProjectPath)).toString();
 
-        // 二、生成文件模板
-// 输入文件为目录
+// 二、生成文件模板
+// 遍历输入文件
         List<Meta.FileConfig.FileInfo> newFileInfoList = new ArrayList<>();
-        String inputFileAbsolutePath = sourceRootPath + File.separator + inputFilePath;
-        if (FileUtil.isDirectory(inputFileAbsolutePath)) {
-            List<File> fileList = FileUtil.loopFiles(inputFileAbsolutePath);
-            for (File file : fileList) {
-                Meta.FileConfig.FileInfo fileInfo = makeFileTemplate(modelInfo, searchStr, sourceRootPath, file);
+        for (String inputFilePath : inputFilePathList) {
+            String inputFileAbsolutePath = sourceRootPath + File.separator + inputFilePath;
+            // 输入的是目录
+            if (FileUtil.isDirectory(inputFileAbsolutePath)) {
+                List<File> fileList = FileUtil.loopFiles(inputFileAbsolutePath);
+                for (File file : fileList) {
+                    Meta.FileConfig.FileInfo fileInfo = makeFileTemplate(modelInfo, searchStr, sourceRootPath, file);
+                    newFileInfoList.add(fileInfo);
+                }
+            } else {
+                // 输入的是文件
+                Meta.FileConfig.FileInfo fileInfo = makeFileTemplate(modelInfo, searchStr, sourceRootPath, new File(inputFileAbsolutePath));
                 newFileInfoList.add(fileInfo);
             }
-        } else {
-            // 输入的是文件
-            Meta.FileConfig.FileInfo fileInfo = makeFileTemplate(modelInfo, searchStr, sourceRootPath, new File(inputFileAbsolutePath));
-            newFileInfoList.add(fileInfo);
         }
+
+
 
         // 三、生成配置文件
         String metaOutputPath = sourceRootPath + File.separator + "meta.json";
@@ -97,12 +103,15 @@ public class TemplateMaker {
 
     public static void main(String[] args) {
         Meta meta = new Meta();
-        meta.setName("acm-template-generator");
-        meta.setDescription("ACM 示例模板生成器");
+        meta.setName("springboot-init");
+        meta.setDescription("Springboot初始项目");
 
         String projectPath = System.getProperty("user.dir");
         String originProjectPath = new File(projectPath) + File.separator + "dexcode-generator-demo-projects/springboot-init";
-        String inputFilePath ="src/main/java/com/yupi/springbootinit";
+//        String inputFilePath ="src/main/java/com/yupi/springbootinit";
+        String inputFilePath1 = "src/main/java/com/yupi/springbootinit/common";
+        String inputFilePath2 = "src/main/java/com/yupi/springbootinit/controller";
+        List<String> inputFilePathList = Arrays.asList(inputFilePath1, inputFilePath2);
 
 
         // 模型参数信息（首次）
@@ -121,7 +130,7 @@ public class TemplateMaker {
         // 替换变量（第二次）
         String searchStr = "MainTemplate";
 
-        long id = makeTemplate(meta, originProjectPath, inputFilePath, modelInfo, searchStr, null);
+        long id = makeTemplate(meta, originProjectPath, inputFilePathList, modelInfo, "BaseResponse", null);
         System.out.println(id);
     }
 
