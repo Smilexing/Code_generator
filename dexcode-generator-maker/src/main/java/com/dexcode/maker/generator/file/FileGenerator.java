@@ -13,27 +13,24 @@ public class FileGenerator {
     /**
      * 生成静态文件和动态文件
      *
-     * @param model 数据模型
+     * @param model
      * @throws TemplateException
      * @throws IOException
      */
-    public static void doGenerate(Object model) throws TemplateException, IOException {
-        String inputRootPath = "E:/桌面/dexcode-generator/dexcode-generator-demo-projects/acm-template-pro";
-        String outputRootPath = "generated";
-
-        String inputPath;
-        String outputPath;
-
-        inputPath = new File(inputRootPath, "src/com/dexcode/acm/MainTemplate.java.ftl").getAbsolutePath();
-        outputPath = new File(outputRootPath, "src/com/dexcode/acm/MainTemplate.java").getAbsolutePath();
-        DynamicFileGenerator.doGenerate(inputPath, outputPath, model);
-
-        inputPath = new File(inputRootPath, ".gitignore").getAbsolutePath();
-        outputPath = new File(outputRootPath, ".gitignore").getAbsolutePath();
+    public static void doGenerate(Object model) throws IOException, TemplateException {
+        // 当前idea打开的窗口
+        String projectPath = System.getProperty("user.dir");
+        // 找整个项目的根路径 dexcode-generator
+        File parentFile = new File(projectPath).getParentFile();
+        // 输入路径 ACM的示例模板 在 dexcode-generator-demo-projects 目录下
+        String inputPath = new File(parentFile + File.separator + "dexcode-generator-demo-projects/acm-template").getAbsolutePath();
+        // 输出路径
+        String outputPath = projectPath;
+        // 生成静态文件
         StaticFileGenerator.copyFilesByHutool(inputPath, outputPath);
-
-        inputPath = new File(inputRootPath, "README.md").getAbsolutePath();
-        outputPath = new File(outputRootPath, "README.md").getAbsolutePath();
-        StaticFileGenerator.copyFilesByHutool(inputPath, outputPath);
+        // 生成动态文件，会覆盖部分已生成的静态文件
+        String inputDynamicFilePath = projectPath + File.separator + "src/main/resources/templates/MainTemplate.java.ftl";
+        String outputDynamicFilePath = projectPath + File.separator + "acm-template/src/com/yupi/acm/MainTemplate.java";
+        DynamicFileGenerator.doGenerate(inputDynamicFilePath, outputDynamicFilePath, model);
     }
 }

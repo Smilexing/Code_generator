@@ -2,6 +2,7 @@ package com.dexcode.model;
 
 import lombok.Data;
 
+
 /**
 * 数据模型
 */
@@ -19,12 +20,23 @@ public class DataModel {
     public boolean loop = false;
 
     /**
-    * 作者注释
+    * 核心模板
     */
-    public String author = "dexter";
+    public MainTemplate mainTemplate = new MainTemplate();
 
     /**
-    * 输出信息
+    * 用于生成核心模板文件
     */
-    public String outputText = "sum = ";
+    @Data
+    public static class MainTemplate {
+        /**
+        * 作者注释
+        */
+        public String author = "dexter";
+        /**
+        * 输出信息
+        */
+        public String outputText = "sum = ";
+    }
+
 }
