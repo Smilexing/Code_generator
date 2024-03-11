@@ -253,7 +253,7 @@ public class TemplateMaker {
 
     private static Meta.FileConfig.FileInfo makeFileTemplate(TemplateMakerModelConfig templateMakerModelConfig, String sourceRootPath, File inputFile) {
         // 要挖坑的文件绝对路径（用于制作模板）
-        // 注意 win 系统需要对路径进行转义
+        // 注意 win 系统需要对路径进行转义   文件 --> 绝对路径 --> 相对路径
         String fileInputAbsolutePath = inputFile.getAbsolutePath().replaceAll("\\\\", "/");
         String fileOutputAbsolutePath = fileInputAbsolutePath + ".ftl";
 
@@ -261,47 +261,62 @@ public class TemplateMaker {
         String fileInputPath = fileInputAbsolutePath.replace(sourceRootPath + "/", "");
         String fileOutputPath = fileInputPath + ".ftl";
 
-        // 使用字符串替换，生成模板文件
-        String fileContent;
-        // 如果已有模板文件，说明不是第一次制作，则在模板基础上再次挖坑
-        if (FileUtil.exist(fileOutputAbsolutePath)) {
+        // 二、使用字符串替换，生成模板文件
+        String fileContent = null;
+
+        // 如果已有.ftl文件，则为非首次制作，给一个判断标记_1
+        boolean hasTemplateFile = FileUtil.exist(fileOutputAbsolutePath);
+        if (hasTemplateFile) {
             fileContent = FileUtil.readUtf8String(fileOutputAbsolutePath);
         } else {
             // 读取原文件
             fileContent = FileUtil.readUtf8String(fileInputAbsolutePath);
         }
 
-        // 支持多个模型：对同一个文件的内容，遍历模型进行多轮替换
-        TemplateMakerModelConfig.ModelGroupConfig modelGroupConfig = templateMakerModelConfig.getModelGroupConfig();
+        // 支持多个模型：对同一个文件的内容，遍历模型进行多轮替换,即已经拿到要替换的全文本（需要最新替换的内容）
         String newFileContent = fileContent;
         String replacement;
+        TemplateMakerModelConfig.ModelGroupConfig modelGroupConfig = templateMakerModelConfig.getModelGroupConfig();
         for (TemplateMakerModelConfig.ModelInfoConfig modelInfoConfig : templateMakerModelConfig.getModels()) {
+            String fieldName = modelInfoConfig.getFieldName();
             // 不是分组
             if (modelGroupConfig == null) {
-                replacement = String.format("${%s}", modelInfoConfig.getFieldName());
+                replacement = String.format("${%s}", fieldName);
             } else {
                 // 是分组
                 String groupKey = modelGroupConfig.getGroupKey();
                 // 注意挖坑要多一个层级
-                replacement = String.format("${%s.%s}", groupKey, modelInfoConfig.getFieldName());
+                replacement = String.format("${%s.%s}", groupKey, fieldName);
             }
             // 多次替换
             newFileContent = StrUtil.replace(newFileContent, modelInfoConfig.getReplaceText(), replacement);
         }
-        // 文件配置信息
-        Meta.FileConfig.FileInfo fileInfo = new Meta.FileConfig.FileInfo();
-        fileInfo.setInputPath(fileInputPath);
-        fileInfo.setOutputPath(fileOutputPath);
-        fileInfo.setType(FileTypeEnum.FILE.getValue());
 
-        // 和原文件一致，没有挖坑，则为静态生成
-        if (newFileContent.equals(fileContent)) {
-            // 输出路径 = 输入路径
-            fileInfo.setOutputPath(fileInputPath);
-            fileInfo.setGenerateType(FileGenerateTypeEnum.STATIC.getValue());
-        } else {
-            // 生成模板文件
-            fileInfo.setGenerateType(FileGenerateTypeEnum.DYNAMIC.getValue());
+        // 文件配置信息
+        //将文件配置 fileInfo 的构造提前，无论是新增还是修改元信息都能使用该对象
+        Meta.FileConfig.FileInfo fileInfo = new Meta.FileConfig.FileInfo();
+
+        // 修复3：注意文件的输入路径和输出路径要交换，元信息中 .ftl 文件是输入文件
+        fileInfo.setInputPath(fileOutputPath);
+        fileInfo.setOutputPath(fileInputPath);
+        fileInfo.setType(FileTypeEnum.FILE.getValue());
+        // 默认文件生成类型为 动态
+        fileInfo.setGenerateType(FileGenerateTypeEnum.DYNAMIC.getValue());
+
+        // 修复1：既要hasTemplateFile为false 且和原文件一致，没有挖坑，则为静态生成
+        // 判断标记_2：是否修改了文件内容
+        boolean contentEquals = newFileContent.equals(fileContent);
+        if (!hasTemplateFile) {
+            if (contentEquals) {
+                // 输入路径
+                fileInfo.setInputPath(fileInputPath);
+                fileInfo.setGenerateType(FileGenerateTypeEnum.STATIC.getValue());
+            } else {
+                // 文件有挖坑，动态生成（首次制作）
+                FileUtil.writeUtf8String(newFileContent, fileOutputAbsolutePath);
+            }
+        } else if (!contentEquals) {
+            // 有模板文件，且增加了新坑，动态生成（非首次制作）
             FileUtil.writeUtf8String(newFileContent, fileOutputAbsolutePath);
         }
         return fileInfo;
