@@ -17,6 +17,7 @@ public class TemplateMakerFileConfig {
     private List<FileInfoConfig> files;
     private FileGroupConfig fileGroupConfig;
 
+
     @NoArgsConstructor
     @Data
     public static class FileInfoConfig {
@@ -34,4 +35,5 @@ public class TemplateMakerFileConfig {
 
         private String groupName;
     }
+
 }
