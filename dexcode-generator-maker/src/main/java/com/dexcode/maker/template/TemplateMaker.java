@@ -13,6 +13,7 @@ import com.dexcode.maker.meta.enums.FileTypeEnum;
 import com.dexcode.maker.template.enums.FileFilterRangeEnum;
 import com.dexcode.maker.template.enums.FileFilterRuleEnum;
 import com.dexcode.maker.template.model.FileFilterConfig;
+import com.dexcode.maker.template.model.TemplateMakerConfig;
 import com.dexcode.maker.template.model.TemplateMakerFileConfig;
 import com.dexcode.maker.template.model.TemplateMakerModelConfig;
 
@@ -26,17 +27,32 @@ import java.util.stream.Collectors;
  */
 public class TemplateMaker {
 
-
     /**
-     * 制作模板（分步能力制作）
+     * 制作模板（重载方法）
      *
-     * @param newMeta
-     * @param originProjectPath
-     * @param templateMakerFileConfig
-     * @param templateMakerModelConfig
-     * @param id
+     * @param templateMakerConfig
      * @return
      */
+    public static long makeTemplate(TemplateMakerConfig templateMakerConfig) {
+        Meta meta = templateMakerConfig.getMeta();
+        Long id = templateMakerConfig.getId();
+        String originProjectPath = templateMakerConfig.getOriginProjectPath();
+        TemplateMakerFileConfig templateMakerFileConfig = templateMakerConfig.getFileConfig();
+        TemplateMakerModelConfig templateMakerModelConfig = templateMakerConfig.getModelConfig();
+
+        return makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, id);
+    }
+
+        /**
+         * 制作模板（分步能力制作）
+         *
+         * @param newMeta
+         * @param originProjectPath
+         * @param templateMakerFileConfig
+         * @param templateMakerModelConfig
+         * @param id
+         * @return
+         */
     public static long makeTemplate(Meta newMeta, String originProjectPath, TemplateMakerFileConfig templateMakerFileConfig, TemplateMakerModelConfig templateMakerModelConfig, Long id) {
         {
             // 没有 id 则生成
