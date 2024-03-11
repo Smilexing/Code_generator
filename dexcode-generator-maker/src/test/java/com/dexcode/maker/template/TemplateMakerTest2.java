@@ -11,15 +11,13 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class TemplateMakerTest {
-
-
+public class TemplateMakerTest2 {
 
     /**
-     * 测试同配置多次生成时，强制变为静态生成
+     * 同文件目录多次生成时，会扫描新的 FTL 文件
      */
     @Test
-    public void testMakeTemplateBug1() {
+    public void testMakeTemplateBug2() {
         Meta meta = new Meta();
         meta.setName("acm-template-generator");
         meta.setDescription("ACM 示例模板生成器");
@@ -27,8 +25,8 @@ public class TemplateMakerTest {
         String projectPath = System.getProperty("user.dir");
         String originProjectPath = new File(projectPath).getParent()+ File.separator + "dexcode-generator-demo-projects/springboot-init";
 
-        // 文件参数配置
-        String inputFilePath1 = "src/main/resources/application.yml";
+        // 文件参数配置，扫描目录
+        String inputFilePath1 = "src/main/java/com/yupi/springbootinit/common";
         TemplateMakerFileConfig templateMakerFileConfig = new TemplateMakerFileConfig();
         TemplateMakerFileConfig.FileInfoConfig fileInfoConfig1 = new TemplateMakerFileConfig.FileInfoConfig();
         fileInfoConfig1.setPath(inputFilePath1);
@@ -37,14 +35,13 @@ public class TemplateMakerTest {
         // 模型参数配置
         TemplateMakerModelConfig templateMakerModelConfig = new TemplateMakerModelConfig();
         TemplateMakerModelConfig.ModelInfoConfig modelInfoConfig1 = new TemplateMakerModelConfig.ModelInfoConfig();
-        modelInfoConfig1.setFieldName("url");
+        modelInfoConfig1.setFieldName("className");
         modelInfoConfig1.setType("String");
-        modelInfoConfig1.setDefaultValue("jdbc:mysql://localhost:3306/my_db");
-        modelInfoConfig1.setReplaceText("jdbc:mysql://localhost:3306/my_db");
+        modelInfoConfig1.setReplaceText("BaseResponse");
         List<TemplateMakerModelConfig.ModelInfoConfig> modelInfoConfigList = Arrays.asList(modelInfoConfig1);
         templateMakerModelConfig.setModels(modelInfoConfigList);
 
-        long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, 1767154318924521472L);
+        long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, 1767097293150552064L);
         System.out.println(id);
     }
 }
