@@ -38,6 +38,7 @@ public class Meta {
             private String groupKey;
             private String groupName;
             private List<FileInfo> files;
+
         }
     }
 
