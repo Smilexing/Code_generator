@@ -6,6 +6,7 @@ import com.dexcode.maker.meta.Meta;
 import com.dexcode.maker.template.model.TemplateMakerConfig;
 import com.dexcode.maker.template.model.TemplateMakerFileConfig;
 import com.dexcode.maker.template.model.TemplateMakerModelConfig;
+import com.dexcode.maker.template.model.TemplateMakerOutputConfig;
 import org.junit.Test;
 
 import java.io.File;
@@ -19,7 +20,7 @@ public class TemplateMakerTest {
 
 
     /**
-     * 测试同配置多次生成时，强制变为静态生成
+     * 测试 Bug 修复1：同配置多次生成，强制变为静态生成
      */
     @Test
     public void testMakeTemplateBug1() {
@@ -44,14 +45,13 @@ public class TemplateMakerTest {
         modelInfoConfig1.setType("String");
         modelInfoConfig1.setDefaultValue("jdbc:mysql://localhost:3306/my_db");
         modelInfoConfig1.setReplaceText("jdbc:mysql://localhost:3306/my_db");
-        List<TemplateMakerModelConfig.ModelInfoConfig> modelInfoConfigList = Arrays.asList(modelInfoConfig1);
-        templateMakerModelConfig.setModels(modelInfoConfigList);
+        templateMakerModelConfig.setModels(Arrays.asList(modelInfoConfig1));
 
-        long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, 1767154318924521472L);
+        long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig,null,1767154318924521472L);
         System.out.println(id);
     }
     /**
-     * 同文件目录多次生成时，会扫描新的 FTL 文件
+     * 测试 Bug 修复2：同目录多次生成时，会扫描新的 .ftl 文件
      */
     @Test
     public void testMakeTemplateBug2() {
@@ -75,15 +75,14 @@ public class TemplateMakerTest {
         modelInfoConfig1.setFieldName("className");
         modelInfoConfig1.setType("String");
         modelInfoConfig1.setReplaceText("BaseResponse");
-        List<TemplateMakerModelConfig.ModelInfoConfig> modelInfoConfigList = Arrays.asList(modelInfoConfig1);
-        templateMakerModelConfig.setModels(modelInfoConfigList);
+        templateMakerModelConfig.setModels(Arrays.asList(modelInfoConfig1));
 
-        long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, 1767097293150552064L);
+        long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, null,1767097293150552064L);
         System.out.println(id);
     }
 
     /**
-     * 制作 SpringBoot 模板
+     * 制作springboot模板
      */
     @Test
     public void makeSpringBootTemplate() {
@@ -92,7 +91,7 @@ public class TemplateMakerTest {
         TemplateMakerConfig templateMakerConfig = JSONUtil.toBean(configStr, TemplateMakerConfig.class);
         long id = TemplateMaker.makeTemplate(templateMakerConfig);
 
-        configStr = ResourceUtil.readUtf8Str(rootPath + "templateMaker1.json");
+        configStr = ResourceUtil.readUtf8Str(rootPath + "templateMaker3.json");
         templateMakerConfig = JSONUtil.toBean(configStr, TemplateMakerConfig.class);
         TemplateMaker.makeTemplate(templateMakerConfig);
         System.out.println(id);
