@@ -74,10 +74,10 @@ cos:
 knife4j:
   enable: true
   openapi:
-    title: "接口文档"
+    title: "定制化代码生成器项目-接口文档"
     version: 1.0
     group:
       default:
         api-rule: package
         api-rule-resources:
-          - com.yupi.springbootinit.controller
+          - com.yupi.web.controller
