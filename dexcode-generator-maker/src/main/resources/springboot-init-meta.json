@@ -147,12 +147,6 @@
         "generateType": "dynamic"
       },
       {
-        "inputPath": "src/test/.DS_Store",
-        "outputPath": "src/test/.DS_Store",
-        "type": "file",
-        "generateType": "static"
-      },
-      {
         "inputPath": "src/main/java/com/yupi/springbootinit/common/DeleteRequest.java.ftl",
         "outputPath": "src/main/java/com/yupi/springbootinit/common/DeleteRequest.java",
         "type": "file",
@@ -181,18 +175,6 @@
         "outputPath": "src/main/java/com/yupi/springbootinit/model/dto/user/UserAddRequest.java",
         "type": "file",
         "generateType": "dynamic"
-      },
-      {
-        "inputPath": ".DS_Store",
-        "outputPath": ".DS_Store",
-        "type": "file",
-        "generateType": "static"
-      },
-      {
-        "inputPath": "src/.DS_Store",
-        "outputPath": "src/.DS_Store",
-        "type": "file",
-        "generateType": "static"
       },
       {
         "inputPath": "src/main/java/com/yupi/springbootinit/model/entity/User.java.ftl",

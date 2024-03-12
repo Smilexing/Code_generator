@@ -389,6 +389,8 @@ public class TemplateMaker {
             // 策略：同分组内文件 merge，不同分组保留
 
             // 1. 有分组的，以组为单位划分
+            // {"groupKey": "a", "files": [1, 2]}, {"groupKey": "a", "files": [2, 3]}, {"groupKey": "b", "files": [4, 5]}
+            // {"groupKey": "a", "files": [[1, 2], [2, 3]]}, {"groupKey": "b", "files": [[4, 5]]}
             Map<String, List<Meta.FileConfig.FileInfo>> groupKeyFileInfoListMap = fileInfoList
                     .stream()
                     .filter(fileInfo -> StrUtil.isNotBlank(fileInfo.getGroupKey()))
@@ -398,6 +400,9 @@ public class TemplateMaker {
 
 
             // 2. 同组内的文件配置合并
+            // {"groupKey": "a", "files": [[1, 2], [2, 3]]}
+            // {"groupKey": "a", "files": [1, 2, 2, 3]}
+            // {"groupKey": "a", "files": [1, 2, 3]}
             // 保存每个组对应的合并后的对象 map
             Map<String, Meta.FileConfig.FileInfo> groupKeyMergedFileInfoMap = new HashMap<>();
             for (Map.Entry<String, List<Meta.FileConfig.FileInfo>> entry : groupKeyFileInfoListMap.entrySet()) {
