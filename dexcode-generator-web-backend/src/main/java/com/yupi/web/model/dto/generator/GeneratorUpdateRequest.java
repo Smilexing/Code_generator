@@ -3,7 +3,7 @@ package com.yupi.web.model.dto.generator;
 import java.io.Serializable;
 import java.util.List;
 
-import com.yupi.web.meta.Meta;
+import com.dexcode.maker.meta.Meta;
 import lombok.Data;
 
 /**

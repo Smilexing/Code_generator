@@ -23,26 +23,35 @@ public abstract class GenerateTemplate {
         // 0.输出的根路径
         String projectPath = System.getProperty("user.dir");
         String outputPath = projectPath + File.separator + "generated" + File.separator + meta.getName();
+        doGenerate(meta, outputPath);
+    }
+
+    /**
+     * 生成
+     *
+     * @throws TemplateException
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void doGenerate(Meta meta, String outputPath) throws TemplateException, IOException, InterruptedException {
         if (!FileUtil.exist(outputPath)) {
             FileUtil.mkdir(outputPath);
         }
 
-        // 1.复制原始文件
+        // 1、复制原始文件
         String sourceCopyDestPath = copySource(meta, outputPath);
 
-        // 2.代码生成
+        // 2、代码生成
         generateCode(meta, outputPath);
 
-        // 3.构建 jar 包
+        // 3、构建 jar 包
         String jarPath = buildJar(meta, outputPath);
 
-        // 4.封装脚本
+        // 4、封装脚本
         String shellOutputFilePath = buildScript(outputPath, jarPath);
 
-        // 5.生成精简版的程序（产物包）
+        // 5、生成精简版的程序（产物包）
         buildDist(outputPath, sourceCopyDestPath, jarPath, shellOutputFilePath);
-
-        // 6.将产物包压缩…… 遵循开闭原则，不修改已有的代码
     }
 
     /**
@@ -120,9 +129,8 @@ public abstract class GenerateTemplate {
      * @throws TemplateException
      */
     protected void generateCode(Meta meta, String outputPath) throws IOException, TemplateException {
-        // 读取resources目录
-        ClassPathResource classPathResource = new ClassPathResource("");
-        String inputResourcePath = classPathResource.getAbsolutePath();
+        // 读取 resources 目录
+        String inputResourcePath = "";
 
         // Java包的基础路径
         // com.dexcode
