@@ -2,6 +2,9 @@ package com.yupi.web.mapper;
 
 import com.yupi.web.model.entity.Generator;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 * @author Tom Smile
@@ -10,7 +13,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.yupi.web.model.entity.Generator
 */
 public interface GeneratorMapper extends BaseMapper<Generator> {
-
+@Select("  SELECT id,disPath  FORM genertor   WHERE isDelete = 1")
+List<Generator> listDeletedGenerator();
 }
 
 
